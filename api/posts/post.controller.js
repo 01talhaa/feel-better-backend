@@ -21,6 +21,14 @@ exports.getCommentsForPost = async (req, res) => {
         res.status(500).json({ message: "Error fetching comments", error: error.message });
     }
 };
+exports.getAllPosts = async (req, res) => {
+    try {
+        const posts = await Post.findAll();
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching posts", error: error.message });
+    }
+};
 
 exports.createCommentForPost = async (req, res) => {
     try {

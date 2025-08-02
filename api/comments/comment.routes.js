@@ -7,6 +7,9 @@ const controller = require('./comment.controller');
 // For example, you might add this to the `posts.routes.js` file:
 // router.delete('/:postId/comments/:commentId', commentController.deleteComment);
 
+// Get all comments (admin route)
+router.get('/', controller.getAllComments);
+
 // However, for pure separation, you could have a top-level route.
 // PUT /api/comments/123
 // DELETE /api/comments/123

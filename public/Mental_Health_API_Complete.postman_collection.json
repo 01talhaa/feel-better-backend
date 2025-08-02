@@ -1,0 +1,1051 @@
+{
+	"info": {
+		"_postman_id": "712c6243-bce1-4d8e-aa59-907f79d1f037",
+		"name": "Mental Health Platform API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"description": "API collection for the Mental Health Platform"
+	},
+	"item": [
+		{
+			"name": "Auth & Users",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"user_type\": \"STANDARD\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						},
+						"description": "Register a new user with full_name, email, password, and user_type (STANDARD, STUDENT, THERAPIST, ANONYMOUS)"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Login with email and password to get an authentication token"
+					},
+					"response": []
+				},
+				{
+					"name": "Anonymous Login (New)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/anonymous",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"anonymous"
+							]
+						},
+						"description": "Create a new anonymous user without any credentials"
+					},
+					"response": []
+				},
+				{
+					"name": "Anonymous Login (Returning)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"anonymous_id\": \"anon_k9jzbnjjh6\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/anonymous",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"anonymous"
+							]
+						},
+						"description": "Login as a returning anonymous user using their anonymous_id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						},
+						"description": "Get the profile of the currently authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "Get a list of all users (may require admin access)"
+					},
+					"response": []
+				}
+			],
+			"description": "User authentication and profile management endpoints"
+		},
+		{
+			"name": "Therapists",
+			"item": [
+				{
+					"name": "Create Therapist Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 8,\n    \"specialization\": \"Cognitive Behavioral Therapy\",\n    \"license_number\": \"LIC12345\",\n    \"bio\": \"Experienced therapist helping with anxiety and depression.\",\n    \"years_of_experience\": 10\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/therapists",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"therapists"
+							]
+						},
+						"description": "Create a therapist profile for an existing user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Therapists",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/therapists",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"therapists"
+							]
+						},
+						"description": "Get a list of all therapists"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Therapist By User ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/therapists/user/8",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"therapists",
+								"user",
+								"8"
+							]
+						},
+						"description": "Get a therapist profile by user ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Therapist profile management endpoints"
+		},
+		{
+			"name": "Appointments",
+			"item": [
+				{
+					"name": "Create Appointment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"therapist_id\": 1,\n    \"user_id\": 6,\n    \"appointment_time\": \"2024-10-28 14:00:00\",\n    \"duration_minutes\": 60,\n    \"meeting_link\": \"https://meet.example.com/session123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/appointments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"appointments"
+							]
+						},
+						"description": "Create a new appointment between a user and therapist"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Appointments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/appointments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"appointments"
+							]
+						},
+						"description": "Get all appointments (may require admin access)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Appointments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/appointments/my-appointments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"my-appointments"
+							]
+						},
+						"description": "Get appointments for the currently authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Appointments By User ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/appointments/user/6",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"user",
+								"6"
+							]
+						},
+						"description": "Get appointments for a specific user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Appointments By Therapist ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/appointments/therapist/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"therapist",
+								"1"
+							]
+						},
+						"description": "Get appointments for a specific therapist"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Appointment Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"COMPLETED\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/appointments/1/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"1",
+								"status"
+							]
+						},
+						"description": "Update the status of an appointment (e.g., SCHEDULED, COMPLETED, CANCELLED)"
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Appointment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/appointments/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"4"
+							]
+						},
+						"description": "Cancel/delete an appointment"
+					},
+					"response": []
+				}
+			],
+			"description": "Appointment scheduling and management endpoints"
+		},
+		{
+			"name": "Support Groups",
+			"item": [
+				{
+					"name": "Create Support Group",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"group_name\": \"Anxiety Support Circle\",\n    \"user_id\": 7,\n    \"description\": \"A safe space to discuss anxiety.\",\n    \"is_private\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/support-groups",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"support-groups"
+							]
+						},
+						"description": "Create a new support group"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Public Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/support-groups",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"support-groups"
+							]
+						},
+						"description": "Get all public support groups"
+					},
+					"response": []
+				},
+				{
+					"name": "Join Group",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/support-groups/1/join",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"support-groups",
+								"1",
+								"join"
+							]
+						},
+						"description": "Join a support group (uses the authenticated user's ID)"
+					},
+					"response": []
+				},
+				{
+					"name": "Leave Group",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/support-groups/1/leave",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"support-groups",
+								"1",
+								"leave"
+							]
+						},
+						"description": "Leave a support group (uses the authenticated user's ID)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Group Members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/support-groups/1/members",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"support-groups",
+								"1",
+								"members"
+							]
+						},
+						"description": "Get the members of a specific support group"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Group Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/support-groups/1/posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"support-groups",
+								"1",
+								"posts"
+							]
+						},
+						"description": "Get all posts in a specific support group"
+					},
+					"response": []
+				}
+			],
+			"description": "Support group creation and management endpoints"
+		},
+		{
+			"name": "Posts & Comments",
+			"item": [
+				{
+					"name": "Create Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"A good day\",\n    \"user_id\": 7,\n    \"content\": \"Just wanted to share a positive experience I had today.\",\n    \"group_id\": 1,\n    \"post_anonymously\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						},
+						"description": "Create a new post, optionally within a support group"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						},
+						"description": "Get all posts on the platform"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Comment to Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 7,\n    \"content\": \"That's wonderful to hear! Thanks for sharing.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts/1/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"1",
+								"comments"
+							]
+						},
+						"description": "Add a comment to a post"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Post Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/posts/1/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"1",
+								"comments"
+							]
+						},
+						"description": "Get all comments for a specific post"
+					},
+					"response": []
+				},
+				{
+					"name": "Like Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 7\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts/1/like",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"1",
+								"like"
+							]
+						},
+						"description": "Like a post"
+					},
+					"response": []
+				},
+				{
+					"name": "Unlike Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 7\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts/1/like",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"1",
+								"like"
+							]
+						},
+						"description": "Unlike a previously liked post"
+					},
+					"response": []
+				}
+			],
+			"description": "Posts, comments, and likes management endpoints"
+		},
+		{
+			"name": "AI Chat",
+			"item": [
+				{
+					"name": "Start New Session",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 7\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/ai-chat/sessions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"ai-chat",
+								"sessions"
+							]
+						},
+						"description": "Start a new AI chat session"
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messageText\": \"I'm feeling a bit overwhelmed today.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/ai-chat/sessions/1/messages",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"ai-chat",
+								"sessions",
+								"1",
+								"messages"
+							]
+						},
+						"description": "Send a message to an AI chat session"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Session Messages",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/ai-chat/sessions/1/messages",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"ai-chat",
+								"sessions",
+								"1",
+								"messages"
+							]
+						},
+						"description": "Get all messages from a specific AI chat session"
+					},
+					"response": []
+				}
+			],
+			"description": "AI-powered mental health chat endpoints"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

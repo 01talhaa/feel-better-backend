@@ -81,6 +81,14 @@ exports.getGroupMembers = async (req, res) => {
         res.status(500).json({ message: "Error fetching group members", error: error.message });
     }
 };
+exports.getAllSupportGroups = async (req, res) => {
+    try {
+        const groups = await Group.findAll();
+        res.status(200).json(groups);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching groups", error: error.message });
+    }
+};
 
 exports.getPostsInGroup = async (req, res) => {
     try {

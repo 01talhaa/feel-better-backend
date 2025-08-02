@@ -6,18 +6,17 @@ const bcrypt = require('bcryptjs');
 // attaching functions directly to module.exports
 // instead of creating a separate object first.
 
+
 module.exports.create = async (user) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(user.password, salt);
-
-    const sql = `INSERT INTO Users (user_type, full_name, email, password_hash) VALUES (?, ?, ?, ?)`;
+    const sql = `INSERT INTO users (user_type, full_name, email, password_hash) VALUES (?, ?, ?, ?)`;
     const [result] = await pool.query(sql, [user.user_type, user.full_name, user.email, hashedPassword]);
-    
     return { id: result.insertId, email: user.email, fullName: user.full_name, userType: user.user_type };
 };
 
 module.exports.findByEmail = async (email) => {
-    const [rows] = await pool.query("SELECT * FROM Users WHERE email = ?", [email]);
+    const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
     return rows[0];
 };
 
@@ -29,7 +28,7 @@ module.exports.matchPassword = async (enteredPassword, user) => {
 };
 
 module.exports.findById = async (id) => {
-    const [rows] = await pool.query("SELECT user_id, user_type, full_name, email, created_at FROM Users WHERE user_id = ?", [id]);
+    const [rows] = await pool.query("SELECT user_id, user_type, full_name, email, created_at FROM users WHERE user_id = ?", [id]);
     return rows[0];
 };
 
@@ -38,15 +37,13 @@ module.exports.createAnonymous = async () => {
     try {
         // Generate a unique anonymous ID
         const anonymousId = 'anon_' + Math.random().toString(36).substring(2, 15);
-        
         // Create a random password for security
         const password = Math.random().toString(36).substring(2, 15);
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        
         // Insert the anonymous user with ALL required fields
         const [result] = await pool.query(
-            `INSERT INTO Users (
+            `INSERT INTO users (
                 user_type, 
                 anonymous_id, 
                 password_hash,
@@ -54,16 +51,14 @@ module.exports.createAnonymous = async () => {
                 is_verified
             ) VALUES (?, ?, ?, ?, ?)`, 
             [
-                'ANONYMOUS',  // Make sure this matches exactly with the ENUM in your schema
+                'ANONYMOUS',
                 anonymousId,
                 hashedPassword,
-                'Anonymous User',  // Provide a default name for anonymous users
-                false  // Set is_verified to false
+                'Anonymous User',
+                false
             ]
         );
-        
         console.log(`Anonymous user created with ID: ${result.insertId}`);
-        
         return { 
             id: result.insertId, 
             anonymousId: anonymousId,
@@ -79,8 +74,14 @@ module.exports.createAnonymous = async () => {
 // Find user by anonymous ID
 module.exports.findByAnonymousId = async (anonymousId) => {
     const [rows] = await pool.query(
-        "SELECT * FROM Users WHERE anonymous_id = ?", 
+        "SELECT * FROM users WHERE anonymous_id = ?", 
         [anonymousId]
     );
     return rows[0];
+};
+
+// Find all users
+module.exports.findAll = async () => {
+    const [rows] = await pool.query("SELECT user_id, user_type, full_name, email, created_at FROM users");
+    return rows;
 };

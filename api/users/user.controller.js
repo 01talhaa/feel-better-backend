@@ -13,12 +13,17 @@ const generateToken = (id, type) => {
 // This is the function for the POST /register route
 exports.createUser = async (req, res) => {
     console.log('--- EXECUTING: createUser controller ---');
-    console.log('Inspecting the imported User object:', User);
+    console.log('Request body:', req.body);
+    console.log('Content-Type:', req.headers['content-type']);
     try {
         const { user_type, full_name, email, password } = req.body;
         
         if (!email || !password || !full_name || !user_type) {
-            return res.status(400).json({ message: "Please provide all required fields." });
+            return res.status(400).json({ 
+                message: "Please provide all required fields.",
+                required: ["user_type", "full_name", "email", "password"],
+                received: req.body
+            });
         }
 
         const userExists = await User.findByEmail(email);
@@ -40,7 +45,20 @@ exports.createUser = async (req, res) => {
 // THIS IS THE FUNCTION THAT WAS MISSING FROM YOUR EXPORTS
 exports.loginUser = async (req, res) => {
     try {
+        console.log('--- EXECUTING: loginUser controller ---');
+        console.log('Request body:', req.body);
+        console.log('Content-Type:', req.headers['content-type']);
+        
         const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({ 
+                message: "Please provide email and password",
+                required: ["email", "password"],
+                received: req.body
+            });
+        }
+        
         const user = await User.findByEmail(email);
 
         if (user && (await User.matchPassword(password, user))) {
@@ -62,6 +80,10 @@ exports.loginUser = async (req, res) => {
 // Anonymous login function
 exports.loginAnonymous = async (req, res) => {
     try {
+        console.log('--- EXECUTING: loginAnonymous controller ---');
+        console.log('Request body:', req.body);
+        console.log('Content-Type:', req.headers['content-type']);
+        
         // Check if an anonymous_id is provided for returning users
         const { anonymous_id } = req.body;
         
@@ -102,5 +124,16 @@ exports.getUserProfile = async (req, res) => {
         res.json(user);
     } else {
         res.status(404).json({ message: 'User not found' });
+    }
+};
+exports.getAllUsers = async (req, res) => {
+    try {
+        console.log('--- EXECUTING: getAllUsers controller ---');
+        // Get all users from database
+        const users = await User.findAll();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error in getAllUsers:', error);
+        res.status(500).json({ message: "Error fetching users", error: error.message });
     }
 };

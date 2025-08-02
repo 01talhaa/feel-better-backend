@@ -5,6 +5,9 @@ const router = express.Router();
 const controller = require('./user.controller');
 const { protect } = require('../middleware/auth.middleware');
 
+// Root route to get all users
+router.get('/', controller.getAllUsers);
+
 // Public routes for authentication
 router.post('/register', controller.createUser);
 router.post('/login', controller.loginUser);

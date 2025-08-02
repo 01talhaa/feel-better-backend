@@ -26,3 +26,11 @@ exports.getTherapistByUserId = async (req, res) => {
         res.status(500).json({ message: "Error fetching therapist profile", error: error.message });
     }
 };
+exports.getAllTherapists = async (req, res) => {
+    try {
+        const therapists = await Therapist.findAll();
+        res.status(200).json(therapists);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching therapists", error: error.message });
+    }
+};

@@ -1,5 +1,14 @@
 const Appointment = require('./appointment.model');
 
+exports.getAllAppointments = async (req, res) => {
+    try {
+        const appointments = await Appointment.findAll();
+        res.status(200).json(appointments);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching appointments", error: error.message });
+    }
+};
+
 exports.createAppointment = async (req, res) => {
     try {
         const newAppt = await Appointment.create(req.body);

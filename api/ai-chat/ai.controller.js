@@ -27,6 +27,14 @@ exports.postMessageToSession = async (req, res) => {
     const { sessionId } = req.params;
     const { userId, messageText } = req.body;
 
+    // Validate that messageText is not null or empty
+    if (!messageText || messageText.trim() === '') {
+        return res.status(400).json({ 
+            message: "Message text cannot be empty",
+            error: "The message_text field is required and cannot be null or empty"
+        });
+    }
+
     try {
         // 1. Get conversation history for context
         const conversationHistory = await AiChat.findMessagesBySession(sessionId);
@@ -72,6 +80,14 @@ exports.postMessageToSession = async (req, res) => {
 exports.postStreamingMessageToSession = async (req, res) => {
     const { sessionId } = req.params;
     const { messageText } = req.body;
+
+    // Validate that messageText is not null or empty
+    if (!messageText || messageText.trim() === '') {
+        return res.status(400).json({ 
+            message: "Message text cannot be empty",
+            error: "The message_text field is required and cannot be null or empty"
+        });
+    }
 
     try {
         // Set headers for streaming

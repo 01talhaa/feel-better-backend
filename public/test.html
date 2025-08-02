@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .response { background: #f4f4f4; padding: 15px; border-radius: 5px; white-space: pre-wrap; }
+        button { margin: 10px 0; padding: 8px 15px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #45a049; }
+        input, select { margin: 5px 0; padding: 8px; width: 100%; box-sizing: border-box; }
+        .form-group { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h1>Mental Health API Test</h1>
+    
+    <h2>Register User</h2>
+    <div class="form-group">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" value="Test User">
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" value="test@example.com">
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" value="password123">
+    </div>
+    <div class="form-group">
+        <label for="userType">User Type:</label>
+        <select id="userType">
+            <option value="STANDARD">Standard</option>
+            <option value="STUDENT">Student</option>
+            <option value="THERAPIST">Therapist</option>
+        </select>
+    </div>
+    <button onclick="register()">Register</button>
+    <div id="registerResponse" class="response"></div>
+    
+    <h2>Login</h2>
+    <div class="form-group">
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" value="test@example.com">
+    </div>
+    <div class="form-group">
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" value="password123">
+    </div>
+    <button onclick="login()">Login</button>
+    <div id="loginResponse" class="response"></div>
+    
+    <h2>Anonymous Login</h2>
+    <button onclick="anonymousLogin()">Login Anonymously</button>
+    <div id="anonymousResponse" class="response"></div>
+    
+    <h2>Get All Users</h2>
+    <button onclick="getAllUsers()">Get Users</button>
+    <div id="usersResponse" class="response"></div>
+
+    <script>
+        // Change this to your API base URL
+        const API_URL = 'http://localhost:3000/api';
+        
+        async function register() {
+            const response = document.getElementById('registerResponse');
+            try {
+                const res = await fetch(`${API_URL}/users/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: document.getElementById('fullName').value,
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value,
+                        user_type: document.getElementById('userType').value
+                    })
+                });
+                
+                const data = await res.json();
+                response.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                response.textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function login() {
+            const response = document.getElementById('loginResponse');
+            try {
+                const res = await fetch(`${API_URL}/users/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('loginEmail').value,
+                        password: document.getElementById('loginPassword').value
+                    })
+                });
+                
+                const data = await res.json();
+                response.textContent = JSON.stringify(data, null, 2);
+                
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                }
+            } catch (error) {
+                response.textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function anonymousLogin() {
+            const response = document.getElementById('anonymousResponse');
+            try {
+                const res = await fetch(`${API_URL}/users/anonymous`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await res.json();
+                response.textContent = JSON.stringify(data, null, 2);
+                
+                if (data.token) {
+                    localStorage.setItem('anonymousToken', data.token);
+                    localStorage.setItem('anonymousId', data.anonymous_id);
+                }
+            } catch (error) {
+                response.textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function getAllUsers() {
+            const response = document.getElementById('usersResponse');
+            try {
+                const res = await fetch(`${API_URL}/users`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await res.json();
+                response.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                response.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

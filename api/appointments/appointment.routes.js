@@ -3,6 +3,9 @@ const router = express.Router();
 const controller = require('./appointment.controller');
 const { protect } = require('../../api/middleware/auth.middleware');
 
+// Root route to get all appointments
+router.get('/', controller.getAllAppointments);
+
 // Create a new appointment
 router.post('/', controller.createAppointment);
 

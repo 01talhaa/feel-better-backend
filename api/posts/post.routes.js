@@ -4,7 +4,7 @@ const controller = require('./post.controller');
 
 // Main post routes
 router.post('/', controller.createPost);
-// router.get('/', controller.getAllPosts);
+router.get('/', controller.getAllPosts);
 // router.get('/:postId', controller.getPostById);
 
 // Nested routes for comments on a post

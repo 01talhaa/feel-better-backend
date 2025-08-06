@@ -15,7 +15,10 @@ const commentRoutes = require('./api/comments/comment.routes');
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable CORS for all routes
+app.use(cors({
+  origin: '*',
+  credentials: true
+})); // Enable CORS for all routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 
@@ -50,6 +53,8 @@ app.use((err, req, res, next) => {
         error: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message
     });
 });
+
+// ...existing code...
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

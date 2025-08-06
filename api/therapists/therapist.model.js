@@ -10,7 +10,12 @@ const TherapistModel = {
             therapistData.bio,
             therapistData.years_of_experience
         ]);
-        return { id: result.insertId, ...therapistData };
+        // Return the full joined profile (with user info)
+        const [rows] = await pool.query(
+            `SELECT t.*, u.full_name, u.email FROM therapists t JOIN users u ON t.user_id = u.user_id WHERE t.therapist_id = ?`,
+            [result.insertId]
+        );
+        return rows[0];
     },
     async findAll() {
         // Join with users table to get name and email

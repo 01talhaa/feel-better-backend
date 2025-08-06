@@ -1,0 +1,11 @@
+### Test: Create Therapist Profile (production)
+POST https://feelbetter.pixelprimp.com/api/therapists/
+Content-Type: application/json
+
+{
+    "user_id": 14,
+    "specialization": "Cognitive Behavioral Therapy",
+    "license_number": "LIC123454545",
+    "bio": "Experienced therapist helping with anxiety and depression.",
+    "years_of_experience": 10
+}
